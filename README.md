@@ -51,7 +51,20 @@ To be written.
 Potential references:
 
 - https://stackoverflow.com/a/1506337 & https://stackoverflow.com/a/24689277
+
 - http://antoinecomeau.blogspot.com/2014/07/mapping-between-permutations-and.html
+
+## Special thanks
+
+- My significant other, for suggesting that I use a Cluedo board for this challenge
+
+- [dCode](https://www.dcode.fr/), for being able to calculate insanely high [factorials](https://www.dcode.fr/factorial) and [divisions](https://www.dcode.fr/big-numbers-division) when [Google can't](https://www.google.com/search?q=(183!)%2F(177!))
+
+- [Milefoot](http://www.milefoot.com/math/discrete/counting/counting.htm) for the permutations count formula
+
+- [kratenko](https://stackoverflow.com/users/1358283/kratenko)['s answer](https://stackoverflow.com/a/29847712/9399492) for the number to digits count formula
+
+- More to be added
 
 ## License
 
