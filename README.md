@@ -2,11 +2,34 @@
 
 This repository contains the source code for my entry to the SO Code Challenge #2.
 
-## Description
+## Short description
 
 The challenge consists in encoding an 8+ characters message on the board state of the board game of our choice.
 
 I chose to go with [Cluedo](https://cluedo.fandom.com/wiki/Cluedo_Board_Game) (also known as Clue in North America), as my significant other suggested.
+
+## Usage
+
+### Prerequisites
+
+- Windows or [Wine](https://www.winehq.org/) (note that I haven't tested Wine compatiblity)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/en/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022)
+- [.NET 8](https://dotnet.microsoft.com/fr-fr/download/dotnet/8.0)
+
+### Compiling
+
+- Open [``SO-CC2.sln``](https://github.com/giroletm/SO-CC2/blob/master/SO-CC2.sln) with Visual Studio 2022
+- On top of the screen, change the building type to either:
+    - "Debug", then press the green triangle button to start the project in debug mode
+	- "Release", then press "Build" -> "Build SO-CC2" on the top bar, and you'll find a compiled executable in ``SO-CC2/bin/Release/net8.0-windows``.
+
+### How does it work
+
+Type the message you want to encode in the top right textbox to get the corresponding Cluedo board.
+
+Alternatively, drag-and-drop pawns accross the board to get the corresponding message. [WIP]
+
+## Explanation
 
 There are [182 squares on a classic (1949) Cluedo board](https://cluedo.fandom.com/wiki/File:UK_Game_Board_(First_edition,_1949).jpg) (yes, I counted them by hand). There are [six distinguishable "suspects"](https://cluedo.fandom.com/wiki/Cluedo_1949#Suspects) (Red, Yellow, White, Green, Blue, and Purple). You can't have two paws on the same space, and for all intents and purposes of this challenge, we're going to ignore the rooms and cards players have in hand.
 
