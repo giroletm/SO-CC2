@@ -30,12 +30,18 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             rightGroupBox = new GroupBox();
+            codeLabel = new Label();
             codeTextBox = new TextBox();
             mainMenuStrip = new MenuStrip();
+            toolsToolStripMenuItem = new ToolStripMenuItem();
+            nextExampleToolStripMenuItem = new ToolStripMenuItem();
+            randomizeToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             boardTableLayoutPanel = new TableLayoutPanel();
             playersPictureBox = new PictureBox();
+            alphabetTextBox = new TextBox();
+            alphabetLabel = new Label();
             rightGroupBox.SuspendLayout();
             mainMenuStrip.SuspendLayout();
             boardTableLayoutPanel.SuspendLayout();
@@ -45,6 +51,9 @@
             // rightGroupBox
             // 
             rightGroupBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            rightGroupBox.Controls.Add(alphabetLabel);
+            rightGroupBox.Controls.Add(alphabetTextBox);
+            rightGroupBox.Controls.Add(codeLabel);
             rightGroupBox.Controls.Add(codeTextBox);
             rightGroupBox.Location = new Point(540, 27);
             rightGroupBox.Name = "rightGroupBox";
@@ -52,6 +61,15 @@
             rightGroupBox.TabIndex = 1;
             rightGroupBox.TabStop = false;
             rightGroupBox.Text = "Data";
+            // 
+            // codeLabel
+            // 
+            codeLabel.AutoSize = true;
+            codeLabel.Location = new Point(6, 76);
+            codeLabel.Name = "codeLabel";
+            codeLabel.Size = new Size(56, 15);
+            codeLabel.TabIndex = 1;
+            codeLabel.Text = "Message:";
             // 
             // codeTextBox
             // 
@@ -65,12 +83,35 @@
             // 
             // mainMenuStrip
             // 
-            mainMenuStrip.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
+            mainMenuStrip.Items.AddRange(new ToolStripItem[] { toolsToolStripMenuItem, helpToolStripMenuItem });
             mainMenuStrip.Location = new Point(0, 0);
             mainMenuStrip.Name = "mainMenuStrip";
             mainMenuStrip.Size = new Size(752, 24);
             mainMenuStrip.TabIndex = 2;
             mainMenuStrip.Text = "menuStrip1";
+            // 
+            // toolsToolStripMenuItem
+            // 
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { nextExampleToolStripMenuItem, randomizeToolStripMenuItem });
+            toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            toolsToolStripMenuItem.Size = new Size(46, 20);
+            toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // nextExampleToolStripMenuItem
+            // 
+            nextExampleToolStripMenuItem.Name = "nextExampleToolStripMenuItem";
+            nextExampleToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.N;
+            nextExampleToolStripMenuItem.Size = new Size(190, 22);
+            nextExampleToolStripMenuItem.Text = "Next example";
+            nextExampleToolStripMenuItem.Click += nextExampleToolStripMenuItem_Click;
+            // 
+            // randomizeToolStripMenuItem
+            // 
+            randomizeToolStripMenuItem.Name = "randomizeToolStripMenuItem";
+            randomizeToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.R;
+            randomizeToolStripMenuItem.Size = new Size(190, 22);
+            randomizeToolStripMenuItem.Text = "Randomize";
+            randomizeToolStripMenuItem.Click += randomizeToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
@@ -82,8 +123,10 @@
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(107, 22);
+            aboutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.H;
+            aboutToolStripMenuItem.Size = new Size(150, 22);
             aboutToolStripMenuItem.Text = "About";
+            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
             // boardTableLayoutPanel
             // 
@@ -115,6 +158,29 @@
             playersPictureBox.Size = new Size(138, 138);
             playersPictureBox.TabIndex = 0;
             playersPictureBox.TabStop = false;
+            playersPictureBox.Paint += playersPictureBox_Paint;
+            playersPictureBox.MouseDown += playersPictureBox_MouseDown;
+            playersPictureBox.MouseMove += playersPictureBox_MouseMove;
+            playersPictureBox.MouseUp += playersPictureBox_MouseUp;
+            // 
+            // alphabetTextBox
+            // 
+            alphabetTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            alphabetTextBox.Location = new Point(6, 138);
+            alphabetTextBox.MaxLength = 49;
+            alphabetTextBox.Name = "alphabetTextBox";
+            alphabetTextBox.Size = new Size(188, 23);
+            alphabetTextBox.TabIndex = 2;
+            alphabetTextBox.TextChanged += alphabetTextBox_TextChanged;
+            // 
+            // alphabetLabel
+            // 
+            alphabetLabel.AutoSize = true;
+            alphabetLabel.Location = new Point(6, 120);
+            alphabetLabel.Name = "alphabetLabel";
+            alphabetLabel.Size = new Size(79, 15);
+            alphabetLabel.TabIndex = 3;
+            alphabetLabel.Text = "Character set:";
             // 
             // Main
             // 
@@ -149,5 +215,11 @@
         private ToolStripMenuItem aboutToolStripMenuItem;
         private TableLayoutPanel boardTableLayoutPanel;
         private PictureBox playersPictureBox;
+        private ToolStripMenuItem toolsToolStripMenuItem;
+        private ToolStripMenuItem nextExampleToolStripMenuItem;
+        private ToolStripMenuItem randomizeToolStripMenuItem;
+        private Label codeLabel;
+        private Label alphabetLabel;
+        private TextBox alphabetTextBox;
     }
 }

@@ -31,7 +31,7 @@ Alternatively, drag-and-drop pawns accross the board to get the corresponding me
 
 ## Explanation
 
-There are [182 squares on a classic (1949) Cluedo board](https://cluedo.fandom.com/wiki/File:UK_Game_Board_(First_edition,_1949).jpg) (yes, I counted them by hand). There are [six distinguishable "suspects"](https://cluedo.fandom.com/wiki/Cluedo_1949#Suspects) (Red, Yellow, White, Green, Blue, and Purple). You can't have two paws on the same space, and for all intents and purposes of this challenge, we're going to ignore the rooms and cards players have in hand.
+There are [182 squares on a classic (1949) Cluedo board](https://cluedo.fandom.com/wiki/File:UK_Game_Board_(First_edition,_1949).jpg) (yes, I counted them by hand). There are [six distinguishable "suspects"](https://cluedo.fandom.com/wiki/Cluedo_1949#Suspects) (Red, Yellow, White, Green, Blue, and Purple). You can't have two paws on the same space, and for all intents and purposes of this challenge, we're going to ignore the rooms, and the cards players have in hand.
 
 The permutations of each of these "suspects" pawns on the board will allow us to encode a message.
 
@@ -74,6 +74,8 @@ To be written.
 Potential references:
 - https://stackoverflow.com/a/1506337 & https://stackoverflow.com/a/24689277
 - http://antoinecomeau.blogspot.com/2014/07/mapping-between-permutations-and.html
+- https://math.stackexchange.com/a/3803239
+- https://stackoverflow.com/a/24508736/9399492
 
 ## Special thanks
 
