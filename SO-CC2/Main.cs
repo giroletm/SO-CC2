@@ -89,12 +89,12 @@ namespace SO_CC2
             firstCol.SizeType = lastCol.SizeType = firstRow.SizeType = lastRow.SizeType = SizeType.Percent;
 
             double baseBorderCol = ((boardTableLayoutPanel.Width - width) / 2);
-            firstCol.Width = (float)((baseBorderCol + (45 * width / boardTableLayoutPanel.BackgroundImage.Width)) / boardTableLayoutPanel.Width * 100);
-            lastCol.Width = (float)((baseBorderCol + (71 * width / boardTableLayoutPanel.BackgroundImage.Width)) / boardTableLayoutPanel.Width * 100);
+            firstCol.Width = (float)((baseBorderCol + (43 * width / boardTableLayoutPanel.BackgroundImage.Width)) / boardTableLayoutPanel.Width * 100);
+            lastCol.Width = (float)((baseBorderCol + (70 * width / boardTableLayoutPanel.BackgroundImage.Width)) / boardTableLayoutPanel.Width * 100);
 
             double baseBorderRow = ((boardTableLayoutPanel.Height - height) / 2);
-            firstRow.Height = (float)((baseBorderRow + (46 * height / boardTableLayoutPanel.BackgroundImage.Height)) / boardTableLayoutPanel.Height * 100);
-            lastRow.Height = (float)((baseBorderRow + (40 * height / boardTableLayoutPanel.BackgroundImage.Height)) / boardTableLayoutPanel.Height * 100);
+            firstRow.Height = (float)((baseBorderRow + (44 * height / boardTableLayoutPanel.BackgroundImage.Height)) / boardTableLayoutPanel.Height * 100);
+            lastRow.Height = (float)((baseBorderRow + (38 * height / boardTableLayoutPanel.BackgroundImage.Height)) / boardTableLayoutPanel.Height * 100);
 
             float totalPrcC = firstCol.Width + lastCol.Width;
             float totalPrcR = firstRow.Height + lastRow.Height;
@@ -121,20 +121,31 @@ namespace SO_CC2
 
         private void boardTableLayoutPanel_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
         {
+            /*
             #if DEBUG
-            if ((e.Column + e.Row) % 2 == 1)
-                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(64, 255, 0, 0)), e.CellBounds);
-            else
-                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(64, 0, 0, 255)), e.CellBounds);
+            e.Graphics.FillRectangle(new SolidBrush(((x + y) % 2 == 1) ? Color.FromArgb(64, 255, 0, 0) : Color.FromArgb(64, 0, 0, 255)), e.CellBounds);
             #endif
+            */
         }
         private void playersPictureBox_Paint(object sender, PaintEventArgs e)
         {
-            foreach ((char player, int square) in Players)
-            {
-                float squareWidth = (float)e.ClipRectangle.Width / (float)SQUARES_MATRIX.GetLength(1);
-                float squareHeight = (float)e.ClipRectangle.Height / (float)SQUARES_MATRIX.GetLength(0);
+            float squareWidth = (float)e.ClipRectangle.Width / (float)SQUARES_MATRIX.GetLength(1);
+            float squareHeight = (float)e.ClipRectangle.Height / (float)SQUARES_MATRIX.GetLength(0);
 
+            /*
+            #if DEBUG
+            for (int y = 0; y < SQUARES_MATRIX.GetLength(1); y++)
+            {
+                for (int x = 0; x < SQUARES_MATRIX.GetLength(0); x++)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(((x + y) % 2 == 1) ? Color.FromArgb(64, 255, 0, 0) : Color.FromArgb(64, 0, 0, 255)), new RectangleF(x * squareWidth, y * squareHeight, squareWidth, squareHeight));
+                }
+            }
+            #endif
+            */
+
+            foreach ((char player, int square) in Players.OrderBy(player => (player.Key == AttachedCharacter) ? 1 : 0))
+            {
                 PointF sqCoords;
                 if (AttachedCharacter == player)
                 {
@@ -233,23 +244,26 @@ namespace SO_CC2
             int x = (int)Math.Floor((float)e.X / ((float)playersPictureBox.Width / (float)SQUARES_MATRIX.GetLength(1)));
             int y = (int)Math.Floor((float)e.Y / ((float)playersPictureBox.Height / (float)SQUARES_MATRIX.GetLength(0)));
             int square = CoordinatesToSquare(new Point(x, y));
-            if (square >= 0)
+            bool validSquare = (square >= 0) && (!Players.ContainsValue(square));
+            if (validSquare)
                 Players[AttachedCharacter] = square;
 
             AttachedCharacter = ' ';
 
-            if (square < 0)
-            {
-                playersPictureBox.Refresh();
-            }
-            else
+            if(validSquare)
             {
                 StringBuilder newPerm = new(new string(' ', SQUARES));
                 foreach ((char player, int value) in Players)
                     newPerm[value] = player;
 
-                codeTextBox.Text = BaseHelper.ToBase(Permutator.PermutationToIndex(newPerm.ToString()), CharacterSet); // This will call playersPictureBox.Refresh();
+                string newCode = BaseHelper.ToBase(Permutator.PermutationToIndex(newPerm.ToString()), CharacterSet);
+                if(newCode != codeTextBox.Text)
+                    codeTextBox.Text = newCode; // This will call playersPictureBox.Refresh();
+                else
+                    playersPictureBox.Refresh();
             }
+            else
+                playersPictureBox.Refresh();
         }
 
         private void playersPictureBox_MouseMove(object sender, MouseEventArgs e)
