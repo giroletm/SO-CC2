@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             rightGroupBox = new GroupBox();
+            characterSetLabel = new Label();
+            characterSetTextBox = new TextBox();
             codeLabel = new Label();
             codeTextBox = new TextBox();
             mainMenuStrip = new MenuStrip();
@@ -40,8 +42,6 @@
             aboutToolStripMenuItem = new ToolStripMenuItem();
             boardTableLayoutPanel = new TableLayoutPanel();
             playersPictureBox = new PictureBox();
-            alphabetTextBox = new TextBox();
-            alphabetLabel = new Label();
             rightGroupBox.SuspendLayout();
             mainMenuStrip.SuspendLayout();
             boardTableLayoutPanel.SuspendLayout();
@@ -51,8 +51,8 @@
             // rightGroupBox
             // 
             rightGroupBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            rightGroupBox.Controls.Add(alphabetLabel);
-            rightGroupBox.Controls.Add(alphabetTextBox);
+            rightGroupBox.Controls.Add(characterSetLabel);
+            rightGroupBox.Controls.Add(characterSetTextBox);
             rightGroupBox.Controls.Add(codeLabel);
             rightGroupBox.Controls.Add(codeTextBox);
             rightGroupBox.Location = new Point(540, 27);
@@ -61,6 +61,25 @@
             rightGroupBox.TabIndex = 1;
             rightGroupBox.TabStop = false;
             rightGroupBox.Text = "Data";
+            // 
+            // characterSetLabel
+            // 
+            characterSetLabel.AutoSize = true;
+            characterSetLabel.Location = new Point(6, 120);
+            characterSetLabel.Name = "characterSetLabel";
+            characterSetLabel.Size = new Size(79, 15);
+            characterSetLabel.TabIndex = 3;
+            characterSetLabel.Text = "Character set:";
+            // 
+            // characterSetTextBox
+            // 
+            characterSetTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            characterSetTextBox.Location = new Point(6, 138);
+            characterSetTextBox.MaxLength = 49;
+            characterSetTextBox.Name = "characterSetTextBox";
+            characterSetTextBox.Size = new Size(188, 23);
+            characterSetTextBox.TabIndex = 2;
+            characterSetTextBox.TextChanged += characterSetTextBox_TextChanged;
             // 
             // codeLabel
             // 
@@ -163,25 +182,6 @@
             playersPictureBox.MouseMove += playersPictureBox_MouseMove;
             playersPictureBox.MouseUp += playersPictureBox_MouseUp;
             // 
-            // alphabetTextBox
-            // 
-            alphabetTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            alphabetTextBox.Location = new Point(6, 138);
-            alphabetTextBox.MaxLength = 49;
-            alphabetTextBox.Name = "alphabetTextBox";
-            alphabetTextBox.Size = new Size(188, 23);
-            alphabetTextBox.TabIndex = 2;
-            alphabetTextBox.TextChanged += alphabetTextBox_TextChanged;
-            // 
-            // alphabetLabel
-            // 
-            alphabetLabel.AutoSize = true;
-            alphabetLabel.Location = new Point(6, 120);
-            alphabetLabel.Name = "alphabetLabel";
-            alphabetLabel.Size = new Size(79, 15);
-            alphabetLabel.TabIndex = 3;
-            alphabetLabel.Text = "Character set:";
-            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -219,7 +219,7 @@
         private ToolStripMenuItem nextExampleToolStripMenuItem;
         private ToolStripMenuItem randomizeToolStripMenuItem;
         private Label codeLabel;
-        private Label alphabetLabel;
-        private TextBox alphabetTextBox;
+        private Label characterSetLabel;
+        private TextBox characterSetTextBox;
     }
 }

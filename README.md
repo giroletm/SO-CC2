@@ -49,7 +49,7 @@ This leads us to $\frac{182!}{{1!}\times{1!}\times{1!}\times{1!}\times{1!}\times
 
 ### Checking if this number of permutations is enough to encode 8+ characters
 
-We will be using the following 49 characters alphabet: ``ABCDEFGHIJKLMNOPQRSTUVWXYZ !\"'()*+,-.0123456789:?``.
+We will be using the following 49 character set: `` ABCDEFGHIJKLMNOPQRSTUVWXYZ!\"'()*+,-.0123456789:?``.
 
 To calculate if $33,440,192,407,440$ possible permutations can encode 8+ of these characters, [we can use the following formula](https://stackoverflow.com/a/29847712/9399492) to check how many digits it takes to write the maximum permutation index: $1 + floor(log(N) / log(base))$
 
