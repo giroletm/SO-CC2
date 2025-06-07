@@ -18,7 +18,7 @@ namespace SO_CC2.Utils
         {
             BigInteger result = 1;
 
-            for (BigInteger i = n; i > 0; i--)
+            for (BigInteger i = 2; i <= n; i++)
                 result *= i;
 
             return result;

@@ -29,6 +29,9 @@ namespace SO_CC2.Utils
             return counts;
         }
 
+        public static BigInteger GetTotalPermutations(string perm) => GetTotalPermutations(GetFrequencies(perm));
+        public static BigInteger GetTotalPermutations(Dictionary<char, int> freqs) => MathHelper.Factorial(freqs.Values.Sum()) / freqs.Values.Aggregate(BigInteger.One, (a, v) => a * MathHelper.Factorial(v));
+
         /// <summary>
         /// Gets the permutation index of <paramref name="str"/>, using its lexicographically sorted version as a base.
         /// <br/>
@@ -76,7 +79,7 @@ namespace SO_CC2.Utils
                 return baseStr;
 
             Dictionary<char, int> freqs = GetFrequencies(baseStr);
-            BigInteger totalCount = MathHelper.Factorial(freqs.Values.Sum()) / freqs.Values.Aggregate(BigInteger.One, (a, v) => a * MathHelper.Factorial(v));
+            BigInteger totalCount = GetTotalPermutations(freqs);
             BigInteger acc = 0;
 
             for (int n = 0; n < baseStr.Length; n++)

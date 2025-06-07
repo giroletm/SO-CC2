@@ -89,6 +89,8 @@ namespace SO_CC2
         /// </summary>
         private Point CursorPosition { get; set; } = new Point(-1, -1);
 
+        private string CurrentCode { get; set; } = "";
+
         #endregion
 
         public Main()
@@ -322,12 +324,23 @@ namespace SO_CC2
             int sel = codeTextBox.SelectionStart;
             int ogLen = codeTextBox.TextLength;
             string newText = new string(codeTextBox.Text.ToUpper().ToCharArray().Where(c => CharacterSet.Contains(c)).ToArray());
+
+            // If the inputed code is greater than the max, restore the previous input
+
+            BigInteger textAsNum = BaseHelper.FromBase(newText, CharacterSet);
+            if (textAsNum >= Permutator.GetTotalPermutations(LEXICO_BASE))
+                newText = CurrentCode;
+
+            // Set the code to use to the computed one if needed, and try not to break the selection cursor
+
             if (newText != codeTextBox.Text)
             {
                 codeTextBox.Text = newText; // This will call this function again, so to avoid rendering twice, we return once we're done cleaning up the text
                 codeTextBox.SelectionStart = Math.Max(Math.Min(sel - (ogLen - codeTextBox.TextLength), codeTextBox.TextLength), 0);
                 return;
             }
+
+            CurrentCode = codeTextBox.Text;
 
             // Compute the new permutation the inputed string
             string newPermutation = Permutator.IndexToPermutation(LEXICO_BASE, BaseHelper.FromBase(codeTextBox.Text.ToUpper(), CharacterSet));
@@ -359,12 +372,12 @@ namespace SO_CC2
             charSet = charSet.ToUpper();
 
             // Update the character set
-            if (characterSetTextBox.Text != charSet || CharacterSet != charSet)
+            if (characterSetTextBox.Text != charSet || CharacterSet != charSet || codeTextBox.MaxLength == 0)
             {
                 CharacterSet = characterSetTextBox.Text = charSet;
 
                 // The maximum encodable length can be calculated using this formula, minus one: https://stackoverflow.com/a/29847712/9399492
-                codeTextBox.MaxLength = (int)Math.Floor(BigInteger.Log(MathHelper.Factorial(SQUARES_COUNT) / MathHelper.Factorial(SQUARES_COUNT - PAWNS.Length)) / BigInteger.Log(CharacterSet.Length));
+                codeTextBox.MaxLength = 1 + (int)Math.Floor(BigInteger.Log(MathHelper.Factorial(SQUARES_COUNT) / MathHelper.Factorial(SQUARES_COUNT - PAWNS.Length)) / BigInteger.Log(CharacterSet.Length));
 
                 // Clean up the currently encoded message and rerender accordingly
                 codeTextBox_TextChanged(sender, e);
@@ -409,14 +422,14 @@ namespace SO_CC2
 
             AttachedCharacter = ' ';
 
-            if(validSquare)
+            if (validSquare)
             {
                 StringBuilder newPerm = new(new string(' ', SQUARES_COUNT));
                 foreach ((char player, int value) in PlayerPositions)
                     newPerm[value] = player;
 
                 string newCode = BaseHelper.ToBase(Permutator.PermutationToIndex(newPerm.ToString()), CharacterSet, codeTextBox.MaxLength);
-                if(newCode != codeTextBox.Text)
+                if (newCode != codeTextBox.Text)
                     codeTextBox.Text = newCode; // This will call playersPictureBox.Refresh();
                 else
                     playersPictureBox.Refresh();
@@ -465,6 +478,11 @@ namespace SO_CC2
             }
 
             codeTextBox.Text = builder.ToString();
+        }
+
+        private void maxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            codeTextBox.Text = BaseHelper.ToBase(Permutator.GetTotalPermutations(LEXICO_BASE) - 1, CharacterSet);
         }
 
         /// <summary>

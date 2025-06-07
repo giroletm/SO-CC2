@@ -42,6 +42,7 @@
             aboutToolStripMenuItem = new ToolStripMenuItem();
             boardTableLayoutPanel = new TableLayoutPanel();
             playersPictureBox = new PictureBox();
+            maxToolStripMenuItem = new ToolStripMenuItem();
             rightGroupBox.SuspendLayout();
             mainMenuStrip.SuspendLayout();
             boardTableLayoutPanel.SuspendLayout();
@@ -94,7 +95,7 @@
             // 
             codeTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             codeTextBox.Location = new Point(6, 94);
-            codeTextBox.MaxLength = 8;
+            codeTextBox.MaxLength = 0;
             codeTextBox.Name = "codeTextBox";
             codeTextBox.Size = new Size(188, 23);
             codeTextBox.TabIndex = 0;
@@ -111,7 +112,7 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { nextExampleToolStripMenuItem, randomizeToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { nextExampleToolStripMenuItem, randomizeToolStripMenuItem, maxToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(46, 20);
             toolsToolStripMenuItem.Text = "Tools";
@@ -182,6 +183,14 @@
             playersPictureBox.MouseMove += playersPictureBox_MouseMove;
             playersPictureBox.MouseUp += playersPictureBox_MouseUp;
             // 
+            // maxToolStripMenuItem
+            // 
+            maxToolStripMenuItem.Name = "maxToolStripMenuItem";
+            maxToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.M;
+            maxToolStripMenuItem.Size = new Size(190, 22);
+            maxToolStripMenuItem.Text = "Max";
+            maxToolStripMenuItem.Click += maxToolStripMenuItem_Click;
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -221,5 +230,6 @@
         private Label codeLabel;
         private Label characterSetLabel;
         private TextBox characterSetTextBox;
+        private ToolStripMenuItem maxToolStripMenuItem;
     }
 }
