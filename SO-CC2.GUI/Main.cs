@@ -364,18 +364,25 @@ namespace SO_CC2.GUI
         /// <summary>
         /// Sets <see cref="codeTextBox.Text"/> to a random encodable value.
         /// </summary>
+        /// <remarks>
+        /// Based on https://stackoverflow.com/a/17367241/9399492
+        /// </remarks>
         private void randomizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            StringBuilder builder = new();
             Random rand = new();
 
-            for (var i = 0; i < codeTextBox.MaxLength; i++)
-            {
-                var c = CharacterSet[rand.Next(0, CharacterSet.Length)];
-                builder.Append(c);
-            }
+            BigInteger N = Permutator.GetTotalPermutations(Cluedo.LEXICO_BASE);
+            byte[] bytes = N.ToByteArray();
+            BigInteger R;
 
-            codeTextBox.Text = builder.ToString();
+            do
+            {
+                rand.NextBytes(bytes);
+                bytes[bytes.Length - 1] &= (byte)0x7F;
+                R = new BigInteger(bytes);
+            } while (R >= N);
+
+            codeTextBox.Text = BaseHelper.ToBase(R, CharacterSet);
         }
 
         /// <summary>
