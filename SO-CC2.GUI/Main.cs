@@ -32,6 +32,9 @@ namespace SO_CC2.GUI
         /// </summary>
         private Point CursorPosition { get; set; } = new Point(-1, -1);
 
+        /// <summary>
+        /// The message currently displayed on screen
+        /// </summary>
         private string CurrentCode { get; set; } = "";
 
         #endregion
@@ -197,6 +200,7 @@ namespace SO_CC2.GUI
                         '4' => Color.Green,
                         '5' => Color.Blue,
                         '6' => Color.Purple,
+                        _ => throw new Exception("Unsupported pawn color")
                     }),
                     new RectangleF(sqCoords.X, sqCoords.Y, squareWidth, squareHeight)
                 );
@@ -374,6 +378,9 @@ namespace SO_CC2.GUI
             codeTextBox.Text = builder.ToString();
         }
 
+        /// <summary>
+        /// Sets <see cref="codeTextBox.Text"/> to the maximum possible value with the current <see cref="CharacterSet"/>.
+        /// </summary>
         private void maxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             codeTextBox.Text = BaseHelper.ToBase(Permutator.GetTotalPermutations(Cluedo.LEXICO_BASE) - 1, CharacterSet);
