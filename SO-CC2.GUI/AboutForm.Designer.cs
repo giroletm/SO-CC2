@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace SO_CC2
+namespace SO_CC2.GUI
 {
     partial class AboutForm
     {

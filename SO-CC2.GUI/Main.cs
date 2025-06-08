@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Numerics;
 using System.Text;
 
-namespace SO_CC2
+namespace SO_CC2.GUI
 {
     public partial class Main : Form
     {

@@ -3,17 +3,17 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
-    <RootNamespace>SO_CC2</RootNamespace>
+    <RootNamespace>SO_CC2.GUI</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>icon.ico</ApplicationIcon>
-    <Title>SO-CC2</Title>
+    <Title>SO-CC2.GUI</Title>
     <Authors>RedStoneMatt</Authors>
     <Description>RedStoneMatt's entry to Stack Overflow's Code Challenge #2: Secret messages in game boards.</Description>
-    <PackageProjectUrl>https://github.com/giroletm/SO-CC2</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/giroletm/SO-CC2.GUI</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/giroletm/SO-CC2</RepositoryUrl>
+    <RepositoryUrl>https://github.com/giroletm/SO-CC2.GUI</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
@@ -31,6 +31,10 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SO-CC2.Utils\SO-CC2.Utils.csproj" />
   </ItemGroup>
 
   <ItemGroup>

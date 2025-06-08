@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SO_CC2
+namespace SO_CC2.GUI
 {
     public partial class AboutForm : Form
     {
@@ -33,11 +33,11 @@ namespace SO_CC2
 
             licenseLinkLabel.Text = "Licensed under CC BY-SA 4.0";
             licenseLinkLabel.Links.Clear();
-            licenseLinkLabel.Links.Add(15, 12, "https://github.com/giroletm/SO-CC2/blob/master/LICENSE");
+            licenseLinkLabel.Links.Add(15, 12, "https://github.com/giroletm/SO-CC2.GUI/blob/master/LICENSE");
 
             repoLinkLabel.Text = "GitHub repository";
             repoLinkLabel.Links.Clear();
-            repoLinkLabel.Links.Add(0, repoLinkLabel.Text.Length, "https://github.com/giroletm/SO-CC2");
+            repoLinkLabel.Links.Add(0, repoLinkLabel.Text.Length, "https://github.com/giroletm/SO-CC2.GUI");
         }
 
         /// <summary>

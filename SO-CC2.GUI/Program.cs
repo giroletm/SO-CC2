@@ -1,4 +1,4 @@
-namespace SO_CC2
+namespace SO_CC2.GUI
 {
     internal static class Program
     {
