@@ -9,63 +9,6 @@ namespace SO_CC2.GUI
 {
     public partial class Main : Form
     {
-        #region Constants
-
-        /// <summary>
-        /// The examples provided in the challenge's instructions
-        /// </summary>
-        private static readonly string[] EXAMPLES = { "TREASURE", "LOOKLEFT", "SECRETED", "DIGHERE!", "TOMORROW" };
-
-        /// <summary>
-        /// The squares of a classic Cluedo board. <c>1</c>s represent walkable squares, <c>0</c>s represent non-walkable ones.
-        /// </summary>
-        private static readonly int[,] SQUARES_MATRIX =
-        {
-            { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1 },
-            { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0 },
-            { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0 },
-            { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-            { 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
-            { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
-            { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-        };
-
-        /// <summary>
-        /// The characters representing each pawn internally.
-        /// There's 6 of them on a classic Cluedo board.
-        /// </summary>
-        private const string PAWNS = "123456";
-
-        /// <summary>
-        /// The number of walkable squares on the Cluedo board.
-        /// Calculated at runtime from <see cref="SQUARES_MATRIX"/>.
-        /// </summary>
-        private static readonly int SQUARES_COUNT = SQUARES_MATRIX.Cast<int>().Count(sq => sq == 1);
-
-        /// <summary>
-        /// Base permutation to represent pawns on the Cluedo board
-        /// </summary>
-        private static readonly string LEXICO_BASE = new string(' ', SQUARES_COUNT - PAWNS.Length) + PAWNS;
-
-        #endregion
-
         #region User-editable resources
 
         /// <summary>
@@ -98,55 +41,6 @@ namespace SO_CC2.GUI
             InitializeComponent();
         }
 
-        #region Board utility functions
-
-        /// <summary>
-        /// Computes the coordinates on the board of the <paramref name="squareId"/>-th square.
-        /// <br/>
-        /// Acts as the reverse of <see cref="CoordinatesToSquare"/>.
-        /// </summary>
-        /// <param name="squareId">The square number to compute the coordinates of</param>
-        /// <returns>The coordinates on the board of the <paramref name="squareId"/>-th square</returns>
-        private Point SquareToCoordinates(int squareId)
-        {
-            int height = SQUARES_MATRIX.GetLength(0);
-            int width = SQUARES_MATRIX.GetLength(1);
-
-            int i = 0;
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    if (SQUARES_MATRIX[y, x] > 0)
-                    {
-                        if (i == squareId)
-                            return new Point(x, y);
-
-                        i++;
-                    }
-                }
-            }
-
-            return new Point(-1, -1);
-        }
-
-        /// <summary>
-        /// Computes the square number that corresponds to <paramref name="coords"/>.
-        /// <br/>
-        /// Acts as the reverse of <see cref="SquareToCoordinates"/>.
-        /// </summary>
-        /// <param name="coords">The coordinates to compute the square number of</param>
-        /// <returns>The square number that corresponds to <paramref name="coords"/></returns>
-        private int CoordinatesToSquare(Point coords)
-        {
-            if (SQUARES_MATRIX[coords.Y, coords.X] == 0)
-                return -1;
-
-            return SQUARES_MATRIX.Cast<int>().Take(coords.Y * SQUARES_MATRIX.GetLength(1) + coords.X).Count(sq => sq == 1);
-        }
-
-        #endregion
-
         #region Callbacks
 
         #region Form callbacks
@@ -158,7 +52,7 @@ namespace SO_CC2.GUI
         {
             Main_Resize(sender, e);
 
-            codeTextBox.Text = EXAMPLES[(new Random()).Next(EXAMPLES.Length)];
+            codeTextBox.Text = Cluedo.EXAMPLES[(new Random()).Next(Cluedo.EXAMPLES.Length)];
             characterSetTextBox.Text = CharacterSet;
         }
 
@@ -258,16 +152,16 @@ namespace SO_CC2.GUI
         {
             // The size of a square is the size of the picture box divided by the total amount of square in the same dimension
 
-            float squareWidth = (float)e.ClipRectangle.Width / (float)SQUARES_MATRIX.GetLength(1);
-            float squareHeight = (float)e.ClipRectangle.Height / (float)SQUARES_MATRIX.GetLength(0);
+            float squareWidth = (float)e.ClipRectangle.Width / (float)Cluedo.SQUARES_MATRIX.GetLength(1);
+            float squareHeight = (float)e.ClipRectangle.Height / (float)Cluedo.SQUARES_MATRIX.GetLength(0);
 
             // Render squares with solid colors for debugging purposes
 
             /*
             #if DEBUG
-            for (int y = 0; y < SQUARES_MATRIX.GetLength(1); y++)
+            for (int y = 0; y < Cluedo.SQUARES_MATRIX.GetLength(1); y++)
             {
-                for (int x = 0; x < SQUARES_MATRIX.GetLength(0); x++)
+                for (int x = 0; x < Cluedo.SQUARES_MATRIX.GetLength(0); x++)
                 {
                     e.Graphics.FillRectangle(new SolidBrush(((x + y) % 2 == 1) ? Color.FromArgb(64, 255, 0, 0) : Color.FromArgb(64, 0, 0, 255)), new RectangleF(x * squareWidth, y * squareHeight, squareWidth, squareHeight));
                 }
@@ -288,7 +182,7 @@ namespace SO_CC2.GUI
                 }
                 else
                 {
-                    sqCoords = SquareToCoordinates(square);
+                    sqCoords = Cluedo.SquareToCoordinates(square);
                     sqCoords = new PointF(squareWidth * sqCoords.X, squareHeight * sqCoords.Y);
                 }
 
@@ -328,7 +222,7 @@ namespace SO_CC2.GUI
             // If the inputed code is greater than the max, restore the previous input
 
             BigInteger textAsNum = BaseHelper.FromBase(newText, CharacterSet);
-            if (textAsNum >= Permutator.GetTotalPermutations(LEXICO_BASE))
+            if (textAsNum >= Permutator.GetTotalPermutations(Cluedo.LEXICO_BASE))
                 newText = CurrentCode;
 
             // Set the code to use to the computed one if needed, and try not to break the selection cursor
@@ -343,10 +237,10 @@ namespace SO_CC2.GUI
             CurrentCode = codeTextBox.Text;
 
             // Compute the new permutation the inputed string
-            string newPermutation = Permutator.IndexToPermutation(LEXICO_BASE, BaseHelper.FromBase(codeTextBox.Text.ToUpper(), CharacterSet));
+            string newPermutation = Permutator.IndexToPermutation(Cluedo.LEXICO_BASE, BaseHelper.FromBase(codeTextBox.Text.ToUpper(), CharacterSet));
 
             // Recalculate players positions according to the computed permutation
-            PlayerPositions = PAWNS.ToDictionary(p => p, p => newPermutation.IndexOf(p));
+            PlayerPositions = Cluedo.PAWNS.ToDictionary(p => p, p => newPermutation.IndexOf(p));
 
             // Render the players
             playersPictureBox.Refresh();
@@ -377,7 +271,7 @@ namespace SO_CC2.GUI
                 CharacterSet = characterSetTextBox.Text = charSet;
 
                 // The maximum encodable length can be calculated using this formula, minus one: https://stackoverflow.com/a/29847712/9399492
-                codeTextBox.MaxLength = 1 + (int)Math.Floor(BigInteger.Log(MathHelper.Factorial(SQUARES_COUNT) / MathHelper.Factorial(SQUARES_COUNT - PAWNS.Length)) / BigInteger.Log(CharacterSet.Length));
+                codeTextBox.MaxLength = 1 + (int)Math.Floor(BigInteger.Log(MathHelper.Factorial(Cluedo.SQUARES_COUNT) / MathHelper.Factorial(Cluedo.SQUARES_COUNT - Cluedo.PAWNS.Length)) / BigInteger.Log(CharacterSet.Length));
 
                 // Clean up the currently encoded message and rerender accordingly
                 codeTextBox_TextChanged(sender, e);
@@ -394,9 +288,9 @@ namespace SO_CC2.GUI
         /// </summary>
         private void playersPictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            int x = (int)Math.Floor((float)e.X / ((float)playersPictureBox.Width / (float)SQUARES_MATRIX.GetLength(1)));
-            int y = (int)Math.Floor((float)e.Y / ((float)playersPictureBox.Height / (float)SQUARES_MATRIX.GetLength(0)));
-            AttachedCharacter = PlayerPositions.Where(player => (new Point(x, y)) == SquareToCoordinates(player.Value)).Select(kvp => kvp.Key).FirstOrDefault(' ');
+            int x = (int)Math.Floor((float)e.X / ((float)playersPictureBox.Width / (float)Cluedo.SQUARES_MATRIX.GetLength(1)));
+            int y = (int)Math.Floor((float)e.Y / ((float)playersPictureBox.Height / (float)Cluedo.SQUARES_MATRIX.GetLength(0)));
+            AttachedCharacter = PlayerPositions.Where(player => (new Point(x, y)) == Cluedo.SquareToCoordinates(player.Value)).Select(kvp => kvp.Key).FirstOrDefault(' ');
 
             CursorPosition = new Point(e.X, e.Y);
             playersPictureBox.Refresh();
@@ -411,9 +305,9 @@ namespace SO_CC2.GUI
             if (AttachedCharacter == ' ')
                 return;
 
-            int x = (int)Math.Floor((float)e.X / ((float)playersPictureBox.Width / (float)SQUARES_MATRIX.GetLength(1)));
-            int y = (int)Math.Floor((float)e.Y / ((float)playersPictureBox.Height / (float)SQUARES_MATRIX.GetLength(0)));
-            int square = CoordinatesToSquare(new Point(x, y));
+            int x = (int)Math.Floor((float)e.X / ((float)playersPictureBox.Width / (float)Cluedo.SQUARES_MATRIX.GetLength(1)));
+            int y = (int)Math.Floor((float)e.Y / ((float)playersPictureBox.Height / (float)Cluedo.SQUARES_MATRIX.GetLength(0)));
+            int square = Cluedo.CoordinatesToSquare(new Point(x, y));
 
             // A square is valid if it's free and walkable
             bool validSquare = (square >= 0) && (!PlayerPositions.ContainsValue(square));
@@ -424,7 +318,7 @@ namespace SO_CC2.GUI
 
             if (validSquare)
             {
-                StringBuilder newPerm = new(new string(' ', SQUARES_COUNT));
+                StringBuilder newPerm = new(new string(' ', Cluedo.SQUARES_COUNT));
                 foreach ((char player, int value) in PlayerPositions)
                     newPerm[value] = player;
 
@@ -456,11 +350,11 @@ namespace SO_CC2.GUI
         #region Menu callbacks
 
         /// <summary>
-        /// Sets <see cref="codeTextBox.Text"/> to the next element of the <see cref="EXAMPLES"/> array, or the first if the current value isn't one of the examples.
+        /// Sets <see cref="codeTextBox.Text"/> to the next element of the <see cref="Cluedo.EXAMPLES"/> array, or the first if the current value isn't one of the examples.
         /// </summary>
         private void nextExampleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            codeTextBox.Text = EXAMPLES[(Array.IndexOf(EXAMPLES, codeTextBox.Text) + 1) % EXAMPLES.Length];
+            codeTextBox.Text = Cluedo.EXAMPLES[(Array.IndexOf(Cluedo.EXAMPLES, codeTextBox.Text) + 1) % Cluedo.EXAMPLES.Length];
         }
 
         /// <summary>
@@ -482,7 +376,7 @@ namespace SO_CC2.GUI
 
         private void maxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            codeTextBox.Text = BaseHelper.ToBase(Permutator.GetTotalPermutations(LEXICO_BASE) - 1, CharacterSet);
+            codeTextBox.Text = BaseHelper.ToBase(Permutator.GetTotalPermutations(Cluedo.LEXICO_BASE) - 1, CharacterSet);
         }
 
         /// <summary>
