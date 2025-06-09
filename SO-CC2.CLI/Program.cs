@@ -60,10 +60,14 @@ namespace SO_CC2.CLI
             }
         }
 
+        public static int BaseTop = 0;
+
         private static int MaxChars => 1 + (int)Math.Floor(BigInteger.Log(MathHelper.Factorial(Cluedo.SQUARES_COUNT) / MathHelper.Factorial(Cluedo.SQUARES_COUNT - Cluedo.PAWNS.Length)) / BigInteger.Log(CharacterSet.Length));
 
         private static void Main(string[] args)
         {
+            BaseTop = Console.CursorTop;
+
             CurrentCode = Cluedo.EXAMPLES[(new Random()).Next(Cluedo.EXAMPLES.Length)];
             Console.WriteLine();
 
@@ -120,7 +124,7 @@ namespace SO_CC2.CLI
             Console.SetCursorPosition(0, bottomestTop);
         }
 
-        private static void RerenderMessageTextbox(int messageLeft, int messageTop, ConsoleColor backgroundColor)
+        private static void RerenderMessageTextbox(int messageLeft, int messageTop, ConsoleColor backgroundColor, bool noReset = false)
         {
             (int cLeft, int cTop) = Console.GetCursorPosition();
             ConsoleColor srcBColor = Console.BackgroundColor;
@@ -131,7 +135,7 @@ namespace SO_CC2.CLI
             Console.BackgroundColor = backgroundColor;
             Console.Write(CurrentCode.PadLeft(MaxChars, CharacterSet[0]));
 
-            if (cTop != messageTop && cLeft != messageLeft)
+            if (!noReset)
             {
                 Console.ForegroundColor = srcFColor;
                 Console.BackgroundColor = srcBColor;
@@ -154,7 +158,7 @@ namespace SO_CC2.CLI
         private static int EditMessageState(int messageLeft, int messageTop) // State 1
         {
             Console.SetCursorPosition(messageLeft, messageTop);
-            RerenderMessageTextbox(messageLeft, messageTop, ConsoleColor.DarkGreen);
+            RerenderMessageTextbox(messageLeft, messageTop, ConsoleColor.DarkGreen, true);
 
             while (true)
             {
@@ -292,17 +296,19 @@ namespace SO_CC2.CLI
                     if (CharacterSet.Length < maxChars)
                     {
                         char rChar = pressed.KeyChar.ToString().ToUpper()[0];
+                        if (!CharacterSet.Contains(rChar))
+                        {
+                            int currIdx = Console.CursorLeft - charsetLeft;
 
-                        int currIdx = Console.CursorLeft - charsetLeft;
+                            string newText = CharacterSet.Insert(currIdx, rChar.ToString());
 
-                        string newText = CharacterSet.Insert(currIdx, rChar.ToString());
-
-                        CharacterSet = newText;
-                        Console.SetCursorPosition(charsetLeft, charsetTop);
-                        Console.Write(CharacterSet.PadRight(maxChars, ' '));
-                        CurrentCode = CurrentCode;
-                        RerenderMessageTextbox(messageLeft, messageTop, ConsoleColor.Red);
-                        Console.CursorLeft = charsetLeft + currIdx + 1;
+                            CharacterSet = newText;
+                            Console.SetCursorPosition(charsetLeft, charsetTop);
+                            Console.Write(CharacterSet.PadRight(maxChars, ' '));
+                            CurrentCode = CurrentCode;
+                            RerenderMessageTextbox(messageLeft, messageTop, ConsoleColor.Red);
+                            Console.CursorLeft = charsetLeft + currIdx + 1;
+                        }
                     }
                 }
             }
@@ -461,7 +467,7 @@ namespace SO_CC2.CLI
 
             Dictionary<char, Point> playerPos = PlayerPositions.ToDictionary(kvp => kvp.Key, kvp => Cluedo.SquareToCoordinates(kvp.Value));
 
-            Console.SetCursorPosition(0, 0);
+            Console.SetCursorPosition(0, BaseTop);
             Console.ResetColor();
 
             int maxX = Cluedo.SQUARES_MATRIX.GetLength(1);
@@ -480,7 +486,7 @@ namespace SO_CC2.CLI
             }
 
 
-            if (cTop == 0 && cLeft == 0)
+            if (cTop == BaseTop && cLeft == 0)
                 (cLeft, cTop) = Console.GetCursorPosition();
 
             int half = Cluedo.SQUARES_MATRIX.GetLength(0) / 4;
