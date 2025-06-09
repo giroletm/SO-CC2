@@ -18,6 +18,12 @@ namespace SO_CC2.CLI
         /// </summary>
         private static Dictionary<char, int> PlayerPositions { get; set; } = new();
 
+        /// <summary>
+        /// Internal character of the pawn currently attached to the mouse during drag-and-drops.
+        /// Set to <c>' '</c> when there is none.
+        /// </summary>
+        private static char AttachedCharacter { get; set; } = ' ';
+
         private static string _currentCode = "";
 
         /// <summary>
@@ -131,6 +137,18 @@ namespace SO_CC2.CLI
                 Console.BackgroundColor = srcBColor;
                 Console.SetCursorPosition(cLeft, cTop);
             }
+        }
+
+        private static void RecalculateMessage(int messageLeft, int messageTop)
+        {
+            StringBuilder newPerm = new(new string(' ', Cluedo.SQUARES_COUNT));
+            foreach ((char player, int value) in PlayerPositions)
+                newPerm[value] = player;
+
+            string newCode = BaseHelper.ToBase(Permutator.PermutationToIndex(newPerm.ToString()), CharacterSet, MaxChars);
+
+            CurrentCode = newCode;
+            RerenderMessageTextbox(messageLeft, messageTop, ConsoleColor.Red);
         }
 
         private static int EditMessageState(int messageLeft, int messageTop) // State 1
@@ -346,18 +364,55 @@ namespace SO_CC2.CLI
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write("ESC to stop moving paws.".PadRight(Console.WindowWidth, ' '));
 
+                        AttachedCharacter = Cluedo.PAWNS[0];
+                        RenderBoard();
                         moving = true;
                     }
                 }
                 else
                 {
-                    if (pressed.Key == ConsoleKey.Escape)
+                    if (pressed.KeyChar.ToString().ToUpper()[0] == 'X')
+                    {
+                        AttachedCharacter = Cluedo.PAWNS[MathHelper.PositiveModulo(Array.IndexOf(Cluedo.PAWNS.ToCharArray(), AttachedCharacter) - 1, Cluedo.PAWNS.Length)];
+                        RenderBoard();
+                    }
+                    else if (pressed.KeyChar.ToString().ToUpper()[0] == 'C')
+                    {
+                        AttachedCharacter = Cluedo.PAWNS[(Array.IndexOf(Cluedo.PAWNS.ToCharArray(), AttachedCharacter) + 1) % Cluedo.PAWNS.Length];
+                        RenderBoard();
+                    }
+                    else if (pressed.Key == ConsoleKey.UpArrow || pressed.Key == ConsoleKey.DownArrow || pressed.Key == ConsoleKey.LeftArrow || pressed.Key == ConsoleKey.RightArrow)
+                    {
+                        Point coords = Cluedo.SquareToCoordinates(PlayerPositions[AttachedCharacter]);
+
+                        if (pressed.Key == ConsoleKey.UpArrow)
+                            coords.Y--;
+                        else if (pressed.Key == ConsoleKey.DownArrow)
+                            coords.Y++;
+                        else if (pressed.Key == ConsoleKey.LeftArrow)
+                            coords.X--;
+                        else if (pressed.Key == ConsoleKey.RightArrow)
+                            coords.X++;
+
+                        if (coords.X >= 0 && coords.Y >= 0 && coords.X < Cluedo.SQUARES_MATRIX.GetLength(1) && coords.Y < Cluedo.SQUARES_MATRIX.GetLength(0) && Cluedo.SQUARES_MATRIX[coords.Y, coords.X] == 1)
+                        {
+                            int potentialSquare = Cluedo.CoordinatesToSquare(coords);
+                            if (!PlayerPositions.Any(kvp => kvp.Value == potentialSquare))
+                            {
+                                PlayerPositions[AttachedCharacter] = potentialSquare;
+                                RecalculateMessage(messageLeft, messageTop);
+                            }
+                        }
+                    }
+                    else if (pressed.Key == ConsoleKey.Escape)
                     {
                         Console.SetCursorPosition(menuLeft, menuTop);
                         Console.ResetColor();
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write("Press P to move pawns, N for the next example, R for a random message, M for the max message, ESC to leave the menu.".PadRight(Console.WindowWidth, ' '));
 
+                        AttachedCharacter = ' ';
+                        RenderBoard();
                         moving = false;
                     }
                 }
@@ -370,22 +425,27 @@ namespace SO_CC2.CLI
             return 1;
         }
 
+        private static ConsoleColor GetColorFromPawn(char pawn)
+        {
+            return pawn switch
+            {
+                '1' => ConsoleColor.Red,
+                '2' => ConsoleColor.Yellow,
+                '3' => ConsoleColor.White,
+                '4' => ConsoleColor.Green,
+                '5' => ConsoleColor.Blue,
+                '6' => ConsoleColor.DarkMagenta,
+                _ => throw new Exception("Unsupported pawn color")
+            };
+        }
+
         private static ConsoleColor GetConsoleColorForCoordinates(int x, int y, Dictionary<char, Point> playerPos)
         {
             char potentialPlayer = playerPos.Where(p => p.Value.X == x && p.Value.Y == y).Select(p => p.Key).FirstOrDefault(' ');
 
             if (potentialPlayer != ' ')
             {
-                return potentialPlayer switch
-                {
-                    '1' => ConsoleColor.Red,
-                    '2' => ConsoleColor.Yellow,
-                    '3' => ConsoleColor.White,
-                    '4' => ConsoleColor.Green,
-                    '5' => ConsoleColor.Blue,
-                    '6' => ConsoleColor.DarkMagenta,
-                    _ => throw new Exception("Unsupported pawn color")
-                };
+                return GetColorFromPawn(potentialPlayer);
             }
             else if (y < Cluedo.SQUARES_MATRIX.GetLength(0) && Cluedo.SQUARES_MATRIX[y, x] == 0)
                 return ConsoleColor.DarkGray;
@@ -404,9 +464,11 @@ namespace SO_CC2.CLI
             Console.SetCursorPosition(0, 0);
             Console.ResetColor();
 
+            int maxX = Cluedo.SQUARES_MATRIX.GetLength(1);
+
             for (int y = 0; y < Cluedo.SQUARES_MATRIX.GetLength(0); y += 2)
             {
-                for (int x = 0; x < Cluedo.SQUARES_MATRIX.GetLength(1); x++)
+                for (int x = 0; x < maxX; x++)
                 {
                     Console.ForegroundColor = GetConsoleColorForCoordinates(x, y, playerPos);
                     Console.BackgroundColor = GetConsoleColorForCoordinates(x, y + 1, playerPos);
@@ -417,12 +479,49 @@ namespace SO_CC2.CLI
                 Console.SetCursorPosition(0, Console.CursorTop + 1); // This avoid overwriting things written on the right
             }
 
-            if (cTop != 0 && cLeft != 0)
+
+            if (cTop == 0 && cLeft == 0)
+                (cLeft, cTop) = Console.GetCursorPosition();
+
+            int half = Cluedo.SQUARES_MATRIX.GetLength(0) / 4;
+
+            if (AttachedCharacter == ' ')
             {
-                Console.ForegroundColor = srcFColor;
-                Console.BackgroundColor = srcBColor;
-                Console.SetCursorPosition(cLeft, cTop);
+                for(int i = -1; i <= 1; i++)
+                {
+                    Console.SetCursorPosition(maxX + 4, half + i );
+                    Console.Write(new string(' ', Console.WindowWidth - maxX - 4));
+                }
             }
+            else
+            {
+                Console.SetCursorPosition(maxX + 4, half - 1);
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("Use the arrow keys to move the selected pawn. Use X and C to change of pawn.");
+
+                Console.SetCursorPosition(maxX + 4, half);
+                foreach (char pawn in Cluedo.PAWNS)
+                {
+                    Console.BackgroundColor = GetColorFromPawn(pawn);
+                    Console.Write("  ");
+                    Console.ResetColor();
+                    Console.Write(' ');
+                }
+
+                Console.SetCursorPosition(maxX + 4, half + 2);
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.White;
+
+                foreach (char pawn in Cluedo.PAWNS)
+                {
+                    Console.Write((AttachedCharacter == pawn) ? "/\\ " : "   ");
+                }
+            }
+
+            Console.ForegroundColor = srcFColor;
+            Console.BackgroundColor = srcBColor;
+            Console.SetCursorPosition(cLeft, cTop);
         }
     }
 }

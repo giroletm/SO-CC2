@@ -23,5 +23,19 @@ namespace SO_CC2.Utils
 
             return result;
         }
+
+        /// <summary>
+        /// Computes the positive modulo of <paramref name="x"/> by <paramref name="m"/>
+        /// </summary>
+        /// <remarks>
+        /// Based on https://stackoverflow.com/a/1082938/9399492
+        /// </remarks>
+        /// <param name="x">The number to calculate the positive modulo of</param>
+        /// <param name="m">The positive modulo right operand</param>
+        /// <returns>The positive modulo of <paramref name="x"/> by <paramref name="m"/></returns>
+        public static int PositiveModulo(int x, int m)
+        {
+            return (x % m + m) % m;
+        }
     }
 }
