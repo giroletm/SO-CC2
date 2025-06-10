@@ -12,22 +12,34 @@ I chose to go with [Cluedo](https://cluedo.fandom.com/wiki/Cluedo_Board_Game) (a
 
 ### Prerequisites
 
-- Windows or [Wine](https://www.winehq.org/) (note that I haven't tested Wine compatiblity)
+- For the GUI: Windows or [Wine](https://www.winehq.org/) (note that I haven't tested Wine compatiblity)
+- For the CLI: Anything that supports [.NET](https://dotnet.microsoft.com/en-us/download)
 - [Visual Studio 2022](https://visualstudio.microsoft.com/en/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022)
 - [.NET 8](https://dotnet.microsoft.com/fr-fr/download/dotnet/8.0)
 
 ### Compiling
 
 - Open [``SO-CC2.sln``](https://github.com/giroletm/SO-CC2/blob/master/SO-CC2.sln) with Visual Studio 2022
+- On top of the screen or in the Solution Explorer, change the start project to either ``SO-CC2.CLI`` or ``SO-CC2.GUI``, depending of what you want or can execute.
 - On top of the screen, change the building type to either:
     - "Debug", then press the green triangle button to start the project in debug mode
-	- "Release", then press "Build" -> "Build SO-CC2" on the top bar, and you'll find a compiled executable in ``SO-CC2/bin/Release/net8.0-windows``.
+	- "Release", then press "Build" -> "Build SO-CC2.CLI" / "Build SO-CC2.GUI" on the top bar, and you'll find a compiled executable in ``SO-CC2.CLI/bin/Release/net8.0`` / ``SO-CC2.GUI/bin/Release/net8.0-windows``.
+	
+### CLI
 
-### How does it work
+By default, you'll be on the ``Message`` textbox. You can switch between it and the ``Character set`` textbox using the Up and Down arrows of your keyboard.
 
-Type the message you want to encode in the top right textbox to get the corresponding Cluedo board.
+When in a textbox, you can type to change its content, but careful of limitations: only characters found in the character set can be typed in the message, and removing characters from the character set can remove characters from the message.
 
-Alternatively, drag-and-drop pawns accross the board to get the corresponding message. [WIP]
+By pressing Tab, you can access to the menu, after which pressing P will let you move pawns using your keyboard's four arrows (which will update the message automatically), and you can change which pawn to move using X and C. The menu also allows you to change the message with some more keys described in there.
+
+### GUI
+
+You can type in the ``Message`` and ``Character set`` textboxes on the right with the same limitations as the CLI.
+
+You can drag-and-drop pawns from the image to whichever free square you want on the board, which will update the message automatically.
+
+The ``Tools`` menu strip will give you the same special commands as the CLI.
 
 ## Explanation
 
