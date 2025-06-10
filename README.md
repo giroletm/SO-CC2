@@ -47,9 +47,21 @@ With:
 
 This leads us to $\frac{182!}{{1!}\times{1!}\times{1!}\times{1!}\times{1!}\times{1!}\times{176!}}=\frac{182!}{176!}=33,440,192,407,440$ possible permutations.
 
-### Checking if this number of permutations is enough to encode 8+ characters
+### Going from a message to a permutation number, and back
+
+It's quite easy, really, just consider the message as a number in the base composed of the character set you've chosen.
 
 We will be using the following 49 character set: `` ABCDEFGHIJKLMNOPQRSTUVWXYZ!\"'()*+,-.0123456789:?``.
+
+This means we must simply parse a message as a base 49 number to get its numerical value, which can also be done in reverse to encode messages.
+
+#### Encoding and decoding numbers to and from any base
+
+Encoding can be done using [a succession of Euclidean divisions by the base number](https://en.wikipedia.org/wiki/Positional_notation#Base_conversion). The quotient is the index in the character set for the first rightmost digit, and you can repeat this operation on the remainder to calculate the second rightmost digit, third, etc until quotient is 0.
+
+Decoding can be done using [Horner's method](https://en.wikipedia.org/wiki/Horner%27s_method), by multiplying each digit's index in the character set by the base number to the power of its position within the number.
+
+#### Checking if the total number of permutations is enough to encode 8+ characters
 
 To calculate if $33,440,192,407,440$ possible permutations can encode 8+ of these characters, [we can use the following formula](https://stackoverflow.com/a/29847712/9399492) to check how many digits it takes to write the maximum permutation index: $1 + floor(log(N) / log(base))$
 
@@ -67,15 +79,45 @@ Do note, reducing our character set to just 26 letters would only give us one ex
 
 *Isn't it kind of crazy to go from 182 spaces to insane factorials to 33 trillions and get back to just 8?*
 
-### Going from a message to a permutation number to an actual permutation on a board, and back
+### Going from a permutation number to an actual permutation on a board, and back
 
-To be written.
+#### Representing the board state as a permutation
 
-Potential references:
-- https://stackoverflow.com/a/1506337 & https://stackoverflow.com/a/24689277
-- http://antoinecomeau.blogspot.com/2014/07/mapping-between-permutations-and.html
-- https://math.stackexchange.com/a/3803239
-- https://stackoverflow.com/a/24508736/9399492
+No need for anything fancy: just have a string with as many spaces are there are empty spaces, and a unique character for each pawn. Their arrangement will define on which square is each pawn placed.
+
+For example, if I have the following string: ``"12345 6                                                                                                                                                                               "`` (notice the 176 spaces in there)
+
+Then it means that pawn ``1`` is on the first square, ``2`` on the second, ``3`` on the third, ``4`` on the fourth, ``5`` on the fifth, and ``6`` on the seventh, since I put a space before it.
+
+You can then shuffle the characters of this string the way you want, and you'll get new pawn positions, **always in a legal state**, you will never have two pawns overlapping each other or more than the 6 base pawns.
+
+#### Convertion between a permutation number and a permutation of the board state
+
+There are various ways to perform this. In fact, I myself [opened a question about it on Stack Overflow](https://stackoverflow.com/q/79652400/9399492), which I encourage you to check out if you're interested into learning more!
+
+To get a permutation number from an actual permutation on a board, I chose to base my implementation on [Vepir's](https://math.stackexchange.com/a/3803239), which was itself based on [Shubham Nanda's explanation](https://math.stackexchange.com/a/1797885):
+
+> $[\frac{n!}{{n_1!}\times{n_2!}\times{...}\times{n_k!}}]$ is the multinomial coefficient. Now we can use this to compute the rank of a given permutation as follows:
+> 
+> Consider the first character (leftmost). say it was the r^th one in the sorted order of characters.
+> 
+> Now if you replace the first character by any of the 1,2,3,..,(r-1)^th character and consider all possible permutations, each of these permutations will precede the given permutation. The total number can be computed using the above formula.
+> 
+> Once you compute the number for the first character, fix the first character, and repeat the same with the second character and so on.
+
+For the opposite process, I based my implementation on [Bartosz Marcinkowski's answer](https://stackoverflow.com/a/24508736/9399492), which recursively calls itself to calculate the character on each index, one by one, and appending the results.
+
+To keep the same reference between the two, I consider the base permutation as the Unicode value-sorted board state string, which is ``"                                                                                                                                                                                123456"``.
+
+Then, all that's left to do is to pass this enormous string as a base along with a permutation index/rank/number to get the board state that corresponds to it using that second algorithm!
+
+The opposite can also be done by passing the permutated board state into the first algorithm.
+
+### Conclusion
+
+And voilà, we got ourselves our Cluedo message encoder. Now that we've all grown up emotionally using some nice, juicy maths, I wonder what's to come with SO code challenges.
+
+I've learnt a lot of things, this challenge was for sure much more interesting than the [previous one](https://stackoverflow.com/beta/challenges/79640866/complete-code-challenge-1-implement-a-text-to-baby-talk-translator)!
 
 ## Special thanks
 
@@ -83,7 +125,10 @@ Potential references:
 - [dCode](https://www.dcode.fr/), for being able to calculate insanely high [factorials](https://www.dcode.fr/factorial) and [divisions](https://www.dcode.fr/big-numbers-division) when [Google can't](https://www.google.com/search?q=(182!)%2F(176!))
 - [Milefoot](http://www.milefoot.com/math/discrete/counting/counting.htm) for the permutations count formula
 - [kratenko](https://stackoverflow.com/users/1358283/kratenko)['s answer](https://stackoverflow.com/a/29847712/9399492) for the number to digits count formula
-- More to be added
+- [Vepir](https://math.stackexchange.com/users/318073/vepir)['s answer](https://math.stackexchange.com/a/3803239) and [Shubham Nanda](https://math.stackexchange.com/users/318202/shubham-nanda)['s answer](https://math.stackexchange.com/a/1797885) for the permutation to index algorithm
+- [Bartosz Marcinkowski](https://stackoverflow.com/users/2307066/bartosz-marcinkowski)['s answer](https://stackoverflow.com/a/24508736/9399492) for the index to permutation algorithm
+- [All of the participants to my SO question on the matter](https://stackoverflow.com/q/79652400/9399492), who not only gave me valuable answers, but also helped improve the question
+- [Wikipedia](https://www.wikipedia.org/)
 
 ## License
 
