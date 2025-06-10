@@ -1,6 +1,6 @@
-# Stack Overflow - Code Challenge #2: Secret messages in game boards
+# Cluedork (Stack Overflow - Code Challenge #2: Secret messages in game boards)
 
-This repository contains the source code for my entry to the [Stack Overflow Code Challenge #2](https://stackoverflow.com/beta/challenges/79651567/code-challenge-2-secret-messages-in-game-boards).
+This repository contains the source code for my entry to the [Stack Overflow Code Challenge #2](https://stackoverflow.com/beta/challenges/79651567/code-challenge-2-secret-messages-in-game-boards), Cluedork.
 
 ## Short description
 
